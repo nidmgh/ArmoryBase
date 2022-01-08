@@ -1,4 +1,4 @@
-# 前言 - 老枪的思考
+# 八卦 (一）：前言 - 老枪的思考
 
 **此文以八卦为主，如果认真，你我就都输了**
 
@@ -18,7 +18,7 @@
 
 1944年出厂，加上半个世纪前的军剩弹，***可靠性***无出其右
 
-![The old gun\label{01-LeVieueFuisl}](../images/01-LeVieuxFusil.jpg?raw=true)
+![The old gun\label{01-LeVieueFuisl}](../images/01-LeVieuxFusil.jpg?)
 
 
 ## 数据库
@@ -56,11 +56,11 @@ Overview\label{01-TPC}](../images/01-TPCtimeline.jpeg?raw=true)
 
 
 
-论战的是是非对错，暂且放到一边，的的确确的高手过招，成了不少专业人士的谈资的。看热闹的人很多，高手也年末总结发言[Databases in 2021: A Year in Review](https://ottertune.com/blog/2021-databases-retrospective/) ， CMU的Pavlo很阿里味“简单真诚”的评论“only old people care about official TPC numbers.” 只有老头们才关心TPC。
+论战的是是非对错，暂且放到一边，的的确确的高手过招，成了不少专业人士的谈资的。看热闹的人很多，高手也年末总结发言[Databases in 2021: A Year in Review](https://ottertune.com/blog/2021-databases-retrospective/) ， CMU的Pavlo很阿里味“简单真诚”的评论`only old people care about official TPC numbers.`, 只有老头们才关心TPC。我个人有不同意见，不过自己也是老头子了，又侧面印证了。
 
-我这里只八卦一个问题：为什么databricks claims 仅仅**2.7X**的性能超越，变被对手如此重视，而某些软文动辄十倍百倍，而无人理睬呢？哦对了，Databricks和snowflake在12月底刚刚发布的Gartner云数据库象限报告中，双双进入领导者象限。
+八卦一个问题：为什么databricks claims 仅仅**2.7X**的性能超越，便被对手如此重视，而某些软文动辄十倍百倍，而无人理睬呢？哦对了，Databricks和snowflake在12月底刚刚发布的Gartner云数据库象限报告中，双双进入领导者象限。
 
-思维总是奇怪跳跃的我，想起《神雕侠侣》最后一回 《华山之巅》，愿意跳跃的同学请自己移步去读头三页。
+思维总是奇怪跳跃的我，想起《神雕侠侣》最后一回 `华山之巅`，愿意跳跃的同学请自己移步去读头三页。
 
 
 ## 性能不是什么？ 
@@ -82,8 +82,9 @@ etc.
 
 
 # 目录
-1. 前言 - 老枪的思考
-2. 数据库系统可靠性与Mosin Nagant
+1. 八卦 (一）：前言 - 老枪的思考
+2.  八卦 (二）：可靠性 - 数据库篇 
+3.  八卦 (三) ：可靠性 - Mosin Nagant篇
 
 <!--
 3. 模块设计 PostgreSQL vs. AR15
