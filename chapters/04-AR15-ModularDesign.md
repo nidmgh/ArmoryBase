@@ -20,9 +20,9 @@ PG的牛X，它作者的牛X，网上无数硬核也有无数的软文。大家�
 
 称为正规军其实是有一定道理的，因为很多现代工业的模式是从军队和战场学来的。[华为就自称军事化管理](https://www.sohu.com/a/241479284_100085094)。接口的巅峰范例就是二次大战是的海陆空协调。模块化更可以追溯到[罗马方阵](https://baike.baidu.com/item/%E7%BD%97%E9%A9%AC%E6%96%B9%E9%98%B5/10008743)时代，两百人队组成一小队，三小队组成一大队，十大队成一军团，于是由60～80人的模块到4～6千人的集团，都有了独立战斗和协调战役的能力。
 
-扯个闲话，工作中我参加过某**战役**的KO，问了一个问题，“多少人力可以投入到这个战役？”，发现与会人不少，真正投入的人力不到3个！用战役来形容这种工作，哎，吹牛都这么卷了。
+扯个闲话，这里提到的正规军协同，是当通讯无法用“喊”之后的成建制的系统协同，而不是字面上的。工作中我参加过某**战役**的KO，问了一个问题，“多少人力可以投入到这个战役？”，发现与会人不少，真正投入的人力不到3个！用战役来形容这种工作，哎，吹牛都这么卷了。
 
-八卦总要有个边界，收一下图是网上google来的PostgreSQL的架构图，有心情的同学可以[参考](https://distributedsystemsauthority.com/postgresql-high-performance-guide-architecture/)，写的还是不错的。
+八卦总要有个边界，收一下图是网上google来的PostgreSQL的架构图，有兴趣的同学可以[参考](https://distributedsystemsauthority.com/postgresql-high-performance-guide-architecture/)，写的还是不错的。
 ![](../images/03-postgresArchitecture.jpeg)
 
 
@@ -36,25 +36,41 @@ PG的牛X，它作者的牛X，网上无数硬核也有无数的软文。大家�
 
 * 类似的还有，transitive closure， query decorelation, etc. 
 
-这里重要的不是能够做什么东西，而是这些这些operation可以在Query Rewrite 模块独立完成，流水线前方的Parser, 和后方的optimizer, executor 侵入性极小甚至无感。 
+这里重要的不是能够做什么东西，而是这些这些operation可以在Query Rewrite 模块独立完成，流水线前方的Parser和后方的optimizer, 对于pipeline后端的 executor 侵入性极小甚至无感。 
 
-模块化的反面典型呢，请移步"MySQL is a pretty poor database, and you should strongly consider using Postgres instead" by Steinar H. Hunderson， 尤其针对的就是MySQL SQL引擎的模块化设计问题。当然我们是八卦为主，不做MySQL与PG之争，客户随便选。
+模块化的反面典型呢，请移步"MySQL is a pretty poor database, and you should strongly consider using Postgres instead" by Steinar H. Hunderson， 尤其针对的就是MySQL SQL引擎的模块化设计问题。当然我们是八卦为主，不做MySQL与PG之争，客户随便选。并且在很多情况下，比如简单直接的范互联网TP场景下MySQL很能是最优解。
 
 
 
 ### 可扩展性
 
-1. SQL 引擎（vs. MySQL 辞职信）； 2. UDF and Stored proc; 3 FDW vs HAWK; 4. 新数据的支持： JSON  
+模块化的另一个好处即是可扩展性。上面我们提到引擎内部模块保证了核心（关系数据库）能力的可迭代，也提供了路径和接口给**未来**
 
-extension : 
-CREATE EXTENSION orafce; 
+1. UDF and Stored proc： 
+用户可定义的编程逻辑是SQL语言早期就奠定基石的扩展方式。SQL和关系模型是面向2维表的描述类语言，
+它们把行列和表关系阐述到极致，但同时并不擅长其他算法。
 
-https://github.com/orafce/orafce
-Functions and operators that emulate a subset of functions and packages from the Oracle RDBMS.
+早期的数学cos/sin, 统计学avg/sum/stdev是在内部用math library实现的，
+对外用built-in function呈现。
+更外延的，就采用用户定义函数（UDF）比时空计算，ML算法实现等等。UDF和BIF没有本质区别，由于数据库/SQL最早被用在金融（银行账户管理）/制造（波音库存管理）/政府（人口注册）等，所以 时间（timestamp/date/year), 简单数学运算（不超过小学四年级水平），字符串查询（人名，地址）和统计学算法等，相对常用且简单，常常内置为BIF；复杂的算法就是UDF了。
 
-There is an associated Google group - https://groups.google.com/forum/?hl=en#!forum/orafce-general
+Stored Proc 一般没有所谓内置的。它的逻辑与通常的应用程序（application)没有本质区别。比如在执行一个信用卡支付操作时，数据库负责记账扣钱支付，常常业务逻辑要求有反盗刷检验（欧美信用卡盗刷的损失一般不会由消费者承担，所以金融机构有很强的利益驱动而实现这个逻辑）。而这个逻辑一般会比较复杂，几个到上百的check point。实现在stored proc里，可以很好的封装，有力与迭代开发。同时stored proc为两个特殊能力提供便利： 1）事务原子性 `begin ..end` ; 2) 与数据库共享内存shared memory space
 
-The Orafce is supported in AWS Aurora with PostgreSQL Compatibility and also in Azure Database for PostgreSQL.
+题外话：面对任何宣布一键式替代oracle（或者其他商业数据库）的，都可以挑战一下stored proc, pl/sql(O), SQL PL(IBM), PL/pgSQL(PG)
+
+2. Foreign Data Wrapper: 
+
+21世纪早期兴盛联邦数据库（Federated database system) 。其实数据库是个老家伙，几乎今天所有的buzzing word, cutting-edge technology, 都可以追溯的70s和80s。联邦数据库的理论概念至少可以追溯的上世纪80年代。但是其成为开发热点是上世纪末本世纪初，当时的初衷是统一管理多个关系数据库（NoSQL, Bigdata等数据源还未诞生）。联邦数据库并没有发展到爆发程度，老兵换新装，今天大家看到的data lake概念，包括databricks 的lakehouse 架构，都有联邦federation的影子和实质。  
+
+PG的FDW是基于SQL standard（2008）的SQL/MED ("Management of External Data") extension。在PG 9中实现的，PG官网上就列述了[13大类一两百个](https://wiki.postgresql.org/wiki/Foreign_data_wrappers)。笔者N多年前就是根据[Apache HAWQ](https://hawq.apache.org/) ，prototype了[openGauss的SQL on Hadoop](https://support.huaweicloud.com/twp-dws/dws_11_0026.html), 现在已经正式商用化为[SQL on Anywhere](https://www.bookstack.cn/read/openGauss-2.1-zh/Developerguide-SQL-on-Anywhere.md)。这是FDW最常用的地方。因为其**module模块化**能力，每个FDW开发都是独立的，而且比较容易与PG优化器集合，所以从oracle_fdw, hdfs_fdw，到clickhouse_fdw。从小小的fdw的开发平台，可以窥到最新的数据库trend。
+
+另，PG extension常常是FDW必需的组件，但不限于FDW。比如PostGiS就是最常见的extension使用。本篇只是为了举例，就不覆盖了
+
+3. 复杂数据类型
+PostgreSQL除了简单数据库类型（numeric， date/time, string/char)，还支持机会所有的复杂类型，包括XML,  Array，composite，Geometric和JSON。
+其中JSON(准确来讲是JSONB, B for binary or better)随着web 和mobile服务的发展，成为最常提及的一种复杂数据格式，也反映在MongoDB的市值250亿美刀上。
+
+
 
 
 ### 数据库事务性和Isolation
@@ -91,7 +107,7 @@ integrity, such as the **Wisconsin Court** System, one of the motivating cases f
 
 上面提到isolation level有6个隔离级别（茴字才四种写法)。事实上，RDBMS常常只用2～3个，PostgreSQL的default是RC，MySQL的default是RR。虽然大部分成熟的关系数据库都有能力提供更高级别的能力，实际业务中常常不需要，或者说买不起，every feature coming with a cost。
 
-虽然我知道保时捷跑车很好，我偏偏喜欢自己的12年新25万公里的本田奇域（穷是俺的生命的原动力）。同客户交流也一样，可以讲牛X的东西，选型是要按合适的来。这篇扯文就是在七年新的Early 2014 MacBook Air 上完成的。
+虽然我知道保时捷跑车很好，我偏偏喜欢自己的12年新25万公里的本田奇域（穷是俺的生命的原动力）。同客户交流也一样，可以讲牛X的东西，选型是要按合适的来。这篇扯文的初稿骨架就是在近八年新的Early 2014 MacBook Air 上完成的。
 
 ## ArmaLite AR-15 成年人的乐高
 这是与AK47系列齐名的突击步枪，民用版一般叫AR-15是半自动的。军用版M4/M16为可选择半和全自动
@@ -106,11 +122,27 @@ integrity, such as the **Wisconsin Court** System, one of the motivating cases f
 
 WII 美军的主力步兵武器 M1 Garand，二战之后升级为同样.30口径的M14。
 .30口径包括.30-06和.308(7.62X51mm NATO)，属于大口径步枪子弹。
+
 M14是韩战和越战早期(越战正式开始时间有不同的说法，这里采用1955.11.01) 的主要步兵武器
 在越战中面对新研制的中口径步枪AK47(7.62×39mm)，M14虽然子弹动能大，有效距离远(800+ with scope)， 
 但是在实战中暴露了对于AK47的弱势。大口径子弹在全自动情况下步兵无法掌控后坐力（第二发就完全上天），
 携弹量少无法保证火力压制，同时着弹后多为穿透伤
-在这种情况下，决定开发与AK47类似的中口径步枪
+在这种情况下，决定开发与AK47类似的中口径步枪。
+
+我没有30-06的，网上盗图一种，给大家个视觉感觉三种子弹的体量。
+![](../images/3006_308_556.jpg?raw=true)
+英文子弹的重量变化较大，我没有找到具体军用子弹重量的数字。
+根据我自己装填的数据换算为： 
+
+| 子弹口径                     | 单重 (gr)  | 每公斤  | 典型器械             |
+|:------------------|:--------|:-------|:-------------|
+| 5.45×39mm                | 168         | 92        | AK74 
+| **.223Rem/5.56**            | 194          | 80        | AR-15， M16， M4 
+| 7.62X39mm                | 253         | 61        | AK47/中国五六冲, SKS/中国五六半        
+| .308 Win 7.62×51mm   | 395         | 39.      | M14 , Springfield M1A, Remington 700| 
+| .30-06                      |                |            | M1 Garand   |
+
+注：1kg = 15432grain
  
 ### Modularity
 ### 出初战受挫
