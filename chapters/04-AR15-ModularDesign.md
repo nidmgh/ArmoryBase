@@ -1,6 +1,6 @@
 数据库打工仔在擦拭枪支时，喃喃自语的历史八卦
 
-# 模块化设计：AR15 vs. PostgreSQL
+# 模块化设计A：AR15 vs. PostgreSQL
 
 ## 模块化：独行侠与团队创造
 
@@ -10,7 +10,7 @@ PG的牛X，它作者的牛X，网上无数硬核也有无数的软文。大家�
 
 面对客户分析那种数据库比较适合业务的时候，为了东家的业务（和自己的炫技），常常会谈到PostgreSQL是**学院派** ，MySQL是**野路子**。 演绎为，MySQL是一帮高手（hacker) 在走江湖的时候，需要解决现实问题，于是写了MySQL来做数据管理；PostgreSQL是某PhD青年讲师，为了展示数据库RDBMS的博大精深，并且为了可以给学生讲解数据库系统的各个部件，开发了一个课件。虽然是演绎，PG作者能获得图灵奖，侧面也反映该系统的理论价值
 
-简单的说，两个学生听说了System R论文和项目(搞数据库的同行们装B的必读书目，论文读不懂，至少要[八卦一下](https://www.researchgate.net/publication/220421331_A_History_and_Evaluation_of_System_R))，说咱们搭个积木练练手，于是写了Ingres。后来觉得不够好，顺手致敬一下"man month mythical - The pilot system and the 2nd system effect"(又是另一个软件工程师装B必读), 重写了一个。名字都不愿意费劲，直接POST(in)GRES了。再后来，又有两个学生需要毕业，顶会刊物论文做KPI，就加了一个语言系统，于是今天的PostgreSQL。
+简单的说，两个学生听说了System R论文和项目(搞数据库的同行们装B的必读书目，论文读不懂，至少要[八卦一下](https://www.researchgate.net/publication/220421331_A_History_and_Evaluation_of_System_R))，说咱们搭个积木练练手，于是写了Ingres。后来觉得不够好，顺手致敬一下"Man Month Mythical **人月神话** - The pilot system and the 2nd system effect"(又是软件工程师**装B必读**，强力推荐), 重写了一个。名字都不愿意费劲，直接POST(in)GRES了。再后来，又有两个学生需要毕业，顶会刊物论文做KPI，就加了一个语言系统，于是今天的PostgreSQL。
 
 感谢前辈们呀，养活了我们这些靠这大树和平台吃饭的半瓶子醋们 
 
@@ -23,7 +23,7 @@ PG的牛X，它作者的牛X，网上无数硬核也有无数的软文。大家�
 扯个闲话，这里提到的正规军协同，是当通讯无法用“喊”之后的成建制的系统协同，而不是字面上的。工作中我参加过某**战役**的KO，问了一个问题，“多少人力可以投入到这个战役？”，发现与会人不少，真正投入的人力不到3个！用战役来形容这种工作，哎，吹牛都这么卷了。
 
 八卦总要有个边界，收一下图是网上google来的PostgreSQL的架构图，有兴趣的同学可以[参考](https://distributedsystemsauthority.com/postgresql-high-performance-guide-architecture/)，写的还是不错的。
-![](../images/03-postgresArchitecture.jpeg)
+![](../images/04-postgresArchitecture.jpeg)
 
 
 虽然上图画的是PG, 基本上可以覆盖2/3的传统数据库，因为“天下功夫出少林”。大部分经典数据库都是在System R的系统原型上开发的，IBM的DB2自不必说，传说Larry Ellison当年开发Oracle, 不懂得地方就直接电话System R的作者们。
@@ -38,7 +38,7 @@ PG的牛X，它作者的牛X，网上无数硬核也有无数的软文。大家�
 
 这里重要的不是能够做什么东西，而是这些这些operation可以在Query Rewrite 模块独立完成，流水线前方的Parser和后方的optimizer, 对于pipeline后端的 executor 侵入性极小甚至无感。 
 
-模块化的反面典型呢，请移步"MySQL is a pretty poor database, and you should strongly consider using Postgres instead" by Steinar H. Hunderson， 尤其针对的就是MySQL SQL引擎的模块化设计问题。当然我们是八卦为主，不做MySQL与PG之争，客户随便选。并且在很多情况下，比如简单直接的范互联网TP场景下MySQL很能是最优解。
+模块化的反面典型呢，请移步"MySQL is a pretty poor database, and you should strongly consider using Postgres instead" by Steinar H. Hunderson， 尤其针对的就是MySQL SQL引擎的模块化设计问题。当然我们是八卦为主，不做MySQL与PG之争，客户随便选。并且在很多情况下，比如简单直接的范互联网TP场景下MySQL很可能是最优解。
 
 
 
