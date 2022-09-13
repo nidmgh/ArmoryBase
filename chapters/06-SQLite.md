@@ -5,18 +5,26 @@
 
 数据库打工仔在擦拭枪支时，喃喃自语的八卦历史。
 
-## 产品设计
+## 1. 产品设计
 作为产品设计/产品管理的从业人士，日常工作的一个核心就是明确产品的优势和定位。其实产品设计中还有一个更加重要，又常常被忽略的维度： 产品**边界**
 
 在前文讨论过PostgreSQL，代表经典的数据库设计。作为稳定成熟的关系数据库产品，PG既具有较强的事务性能力，也有丰富的SQL功能带来的分析性能力。PG也提供了时空(Geometric Types, PostGiS)，文本（JSON/JSONB)，还有时序（Timescale, 基于PG的时序分析数据库）。但是PG本身并不会宣传/宣称自己是全能全才。
 
 姚明是中锋，并不是说他不能像后卫一样投三分，只是他明确的知道自己的长处和定位
 
-我们今天就讨论一个数据库专注细分领域的，甚至可以说是小众的，但是又最流行的产品 **SQLite**
+我们今天就讨论一个数据库专注细分领域的，甚至可以说是小众的，但是又最流行的，产品**边界清晰**的数据库 **SQLite**
 
-## SQLite - 兆级数据库（1000B） 
 
-从数据库实例维度，全世界最流行的数据库，正在运行的SQLite超过万亿，因为每一位现代人日常使用多个SQLite[^1]: 
+
+| ![SQLite Logo](../images/06-SQLite370.png?) |
+|:--:|
+| 图片来源 - SQLite.org|
+
+
+
+## 2. SQLite - 兆级数据库（1000B） 
+
+从数据库实例维度，全世界最流行的数据库，正在运行的SQLite超过万亿，因为每一位现代人日常使用多个SQLite[^1] : 
 
 * 所有的Android手机/手环（华为，小米，三星...)
 * 所有的苹果iOS设备手机/Pad/手表
@@ -27,16 +35,20 @@
 * 车载多媒体系统
 * .... 
 
+
 SQLite不需要传统意义的安装，部署，调试，是纯粹意义上的[Zero-Configuration](https://www.sqlite.org/zeroconf.html)。不需要DBA, It just work for a developer，甚至许多i/OS, andriod手机APP的开发者，根本不知道他们在使用SQLite。
 
-## 产品设计
+[^1]: https://www.sqlite.org/mostdeployed.html
+
+
+## 3. SQLite 产品设计
 产品设计，开发实现与应用实践，三者之间不是流水线/waterfall的研发，而是循环往复，螺旋上升的。
 
-SQLite由Hipp开发的，他也是计算机领中N多个从学校肄业的大牛之一，区别在于Hipp是在Duke读博士的时候才悟出来的，比Gates(大三） 和Jobs(大一）就逊色一下。2000年甲方爸爸，世界五大国防工业提供商（俗称军火制造商）之一，列入Fortune 100的 通用动力公司（General Dynamics）需要为美国海军的提供软件系统。如果对GD不熟悉，那可以补课旗舰产品[F-16](https://en.wikipedia.org/wiki/General_Dynamics_F-16_Fighting_Falcon)
+SQLite由Dwayne Richard Hipp开发的，Hipp也算是计算机领中N多个从学校肄业的大牛之一，区别在于Hipp是在Duke读博士的时候才悟出来的，比Gates(大三） 和Jobs(大一）就逊色一下。2000年甲方爸爸，世界五大国防工业提供商（俗称军火制造商）之一，列入Fortune 100的 通用动力公司（General Dynamics）需要为美国海军的提供软件系统。如果对GD不熟悉，那可以补课旗舰产品[F-16](https://en.wikipedia.org/wiki/General_Dynamics_F-16_Fighting_Falcon)
 
 Hipp作为**政府的合同工**，因为联邦政府关门（对的，就是那种没有钱导致的政府关门），暂时失业了。同样是待业在家（笔者刚刚短暂的享受了几天），Hipp搞出的事情就是写个数据库，处理个战舰损管控制系统。
 
-### 需求
+### 2.1 需求
 
 | ![驱逐舰奥斯卡奥斯丁\label{06驱逐舰奥斯卡奥斯丁}](../images/06_SQLite-USS_Oscar_Austin.jpeg?) |
 |:--:|
@@ -51,7 +63,9 @@ Hipp作为**政府的合同工**，因为联邦政府关门（对的，就是那
 
 这个系统联系不上的数据库，是当年赫赫有名的Informix。虽然不如Oracle, Db2(那是还没有SQL Server的时代），Informix也是top5 的数据库，二十年前被IBM用10亿美刀收购。可是Informix不是为这个业务场景服务的，事实上当年没有任何一款数据库符合此场景
 
-### 边界：**不是什么**
+[^6]: https://thenewstack.io/the-origin-story-of-sqlite-the-worlds-most-widely-used-database-software/
+
+### 2.2 边界：**不是什么**
 
 **NOT another RDBMS**：
 
@@ -63,7 +77,7 @@ Hipp作为**政府的合同工**，因为联邦政府关门（对的，就是那
 * 跨平台不是设计指标（对比2000 java的崛起）
 * 功能齐全不是设计目的
 
-### 定位: 
+### 2.3 定位：为单一APP服务的数据库 
 
 自己自足Self contained 关系数据管理系统，直接服务某应用某块。此概念与现在流行的microservices有类似之处。
 
@@ -73,16 +87,17 @@ SQLite面临的不是提高Informix链接数，负责的链接池算法或者断
 
 
 
-### 特点（优点）：**NOT Faster, Better, Cheaper**
+### 2.4 特点（优点）：**NOT Faster, Better, Cheaper**
 
 咬文嚼字的说，**优点**是销售词汇，产品设计角度应该强调的是特点。特点在适合的场景中才是优势。SQLite，不是[最快最大](#描述产品的片儿汤话）的数据库，恰恰相反它是最小的标准数据库RDBMS。
 
 SQLite的特点是如此明显的，所以宣传它不用那些看不出产品特点的片儿汤话[^8]。
 
 
+[^8]: https://www.baike.com/wiki/%E7%89%87%E5%84%BF%E6%B1%A4%E8%AF%9D
 
 
-#### 小：*small and simple*
+#### 2.4.1 小：*small and simple*
 
 通过C编写，在正式发布5年之后，遇到产品贵人Google/Andriod的时候，SQLite的binary也不过250KB。出世20多年过程中，添加了全文检索，CTE，JSON等高级功能后，SQLite的发布版也只有小小的700KB。
 
@@ -90,25 +105,27 @@ SQLite的特点是如此明显的，所以宣传它不用那些看不出产品�
 
 SQLite其实很"大"，3.33.0(2020GA)可以最大支持281TB的数据。其系统测试保护四大类，几百万测试级。即使最小的，服务开发程序员的，“very quick”Tcl 测试，也有30万个。可以让许多大厂的号称企业级的系统测试汗颜了[^9]。
 
-#### 标准数据库
+[^9]: How SQLite Is Tested https://sqlite.org/testing.html
+
+#### 2.4.2 标准数据库
 
 	1. 支持数据库最重要的事务ACID。
 	2. 兼容标准的SQL syntax，SQLite 1.0（2000年） 使用PostgreSQL 6.5(1999年) 语法。现在支持大部分SQL-92标准 
 	3. C/C++ interface作为原始编程语言接口，为后期衍生开发提供可扩展的链接
 
-#### 嵌入式
+#### 2.4.3 嵌入式
 
 大家熟悉数据库系统，Oracle, DB2, MySQL等，是存在于应用程序之外的独立系统，一个Oracle为多个应用服务。银行系统为例，应用(application)包括存取（强事务write)，流水单（单储户Readonly），储户留存（月底报表, BI Report)
 
 SQLite是嵌入式的数据库，作为应用（APP）的一个部件，同时安装。同应用和用户常常都是一对一关系。SQLlite的**小**赋予了它可以被嵌入的能力
 
-#### 利用文件系统
+#### 2.4.4 利用文件系统
 
 其定位决定了使用的特殊性：并发少，权限管理简单，性能要求不高。SQLite不用像系统级数据库，深度管理特殊的存储管理系统，比如MySQL 开发自己的innoDB, TiDB 采用TiKV和RocksDB。SQLite依赖操作系统自带的文件系统，读写自己DB file，并且继承文件系统的权限管理。
 
 此设计理念简化系统复杂度，但也并不是没有缺陷。并发读写就是SQLite的明显短板之一。因为整个数据库是一个大文件，依靠文件锁来控制读写冲突。只有在后期（2010）实现[WAL](https://sqlite.org/wal.html)后，才提供了并发功能，同时也不是没有代价的。
 
-#### Serverless
+#### 2.4.5 Serverless
 
 大家常常混淆了“Serverless”这个技术，与云Serverless Computing 这个技术+业务手段]，比如[Serverless Database] (https://en.wikipedia.org/wiki/Serverless_computing#Serverless_databases)，其实还是client/server的服务架构，准确的说是有服务器(Server)的。
 
@@ -116,44 +133,84 @@ Serverless作为一个技术，其经典定义（现在比较小众了）就是�
 
 
 
-#### "官方"认证
+#### 2.4.6 "官方"认证
 
-美国国会图书馆，又称美国国家图书馆（Library of Congress) 推荐的独立于平台的开放格式的四种数据存储格式之一[^2]。
+美国国会图书馆，又称美国国家图书馆（Library of Congress) 推荐的独立于平台的开放格式的四种数据存储格式之一 [^2]
+
+[^2]: https://www.loc.gov/preservation/resources/rfs/data.html
 
 
+## 3. 马后炮，评英雄
 
-### 马后炮，评英雄
-开源
-google
-没有服务器进程，直接接口文件系统
+成功学最重要的优势就在于，面对一个已经成功的产品，项目，人或者团队，总结（堆砌）其英明决策，其实历史偶然性多于必然性，尤其是具体的人和事情。
 
-做项目 vs. 产品
+回头看SQLite, 也是可以总结一些契机和事后方知的因素，促成了SQLite的今天。
 
-### 其他同行
+### 3.1 做项目 vs. 产品
 
-## 一点感触
+肯定不是某领导决策的结果。本来是个项目（解决Informix掉链问题），Hipp闲的无聊把它作成了产品。
 
-### 技术方向
+反观许多产品团队（国内较多）打着产品的名号最项目。大部分是因为短期业务压力，或者是因为大厂内部竞争，或者因为初创企业生存压力。团队早期做有生命力有世界水平数据库的梦想，很快向现实环境低头了。被甲方爸爸或领导指挥左右，对自己的产品拔苗助长。项目也许拿下了，产品做残了
+<!--
+这里不做具体分析了，简单的说国内较权威的摩天轮上列述了[250多国产数据库](https://www.modb.pro/db/24797)，
+-->
+### 3.2 开源
 
-岔开一句。中国和欧美IT技术开发既有相似处，比如美国为联邦政府提供IT软件服务也有类似中国的认证流程，本着对纳税人负责的态度，严谨但有时也死板，同时政府也常常是重要的金主甲方。不同点是，IT的大方向常常是技术公司引导的，比如说Telsa/SpaceX的跨时代的突破就不大可能是政府引导出来的。
 
-具体到这个国家图书馆的“官方”认证，说起来很有力，其实对于SQLite的成败影响力就非常有效了。如果读者有一天进军欧美市场，有一点建议： 业务销售人员要积极关注政府合规认证，技术开发人员专注设计前沿和产品实现，切记迎合政府。
+SQLite从第一天就是开源的，特别要明确一下，不是开源项目。因为就Hipp一个人开发，开源的。他没有想到SQLite二十年后支持了现代人的分分秒秒的日常生活。甚至在头几年，Kipp都不知道谁使用，甚至他知道通用电气和日立在使用，也是因为出口管制必要法律流程触发的。很幸运的是，Hipp这个工程师得到一个有法务背景的IT商人， Mitchell Baker， CEO of Mozilla Foundation，指导和帮助。SQLite才真正成为一个项目[SQLite联盟](https://www.sqlite.org/consortium.htm) ，有了稳定的资金，同时又保留了开发者主导决策产品的发展的权利
 
-### 描述产品的片儿汤话
+
+### 3.3 Google和Andriod
+SQLite唯一获得的奖项是2005 Google O’Reilly Open Source Award。
+
+当iphone/智能手机被业绩认为是后PC革命的时候，smartphone已经开始使用SQLite, Symbian（Nokia是主要使用者）属于最早的之一。
+
+Google/Andriod在iphone获得最早的风光之后，也走进了掌上的舞台。他们选中了SQLite。于是所有的Andriod APP, 都用SQLite作为默认的数据库管理。实际情况是APP开发者并不了解数据库，也没有动力去选型。APP使用SQLite因为Google/Andriod是选择，也是所有APP教程的选择。
+
+SQLite突然直面了百万的用户，各自bug如雨后春笋一般暴露出来。Hipp花了整整一年时间写测试用例，SQLite像是成长中的少年，等到了机会，吸收了营养，长大成人。
+
+
+<!--
+## 其他同行
+Realm
+
+Firebase
+-->
+
+## 4. 一点感触
+
+### 4.1 业务引导技术方向 - 国内和国际不同的实践
+
+技术服务业务，是行内比较普遍的认知，属于合理的逻辑。细节上国际和国内有些不同。
+
+中国和欧美IT技术开发既有相似处，比如美国为联邦政府提供IT软件服务也有类似中国的认证流程，本着对纳税人负责的态度，严谨但有时也死板，同时政府也常常是重要的金主甲方。不同点是，IT的大方向常常是技术公司引导的，比如说Telsa/SpaceX的跨时代的突破就不大可能是政府引导出来的。
+
+具体到SQLite这个国家图书馆的“官方”认证，说起来很有力，其实对于SQLite的成败影响力就非常有限了。如果产品有一天进军国际市场，有点个人建议： 业务销售人员要积极关注政府合规认证；技术开发人员专注设计前沿和产品实现，切记迎合政府。
+
+### 4.2 描述产品的片儿汤话
 <!--
 产品介绍的时候，常常听到**差异化优势**这个词语，潜意识中，我们甚至把差异和优势等同起来。
 -->
 
 常见的某个产品的商业口号是同样的：*快好省*的衍生词汇。 比如："与 MySQL 和 PostgreSQL 兼容的关系数据库，专为云而打造。性能和可用性与商用数据库相当，成本只有其 1/10" , 2022年九月十三日摘抄[AWS Aurora 官网](https://aws.amazon.com/cn/rds/aurora/)。如果是某个领域的先行者，比如Aurora，倒也罢了，因为是采用了某个突破性新技术，可以担当*快好省*的评价。之后的追随者，也如是定位宣传的产品，就有些东施效颦的偷懒了。
 
+PPT/胶片是技术产品人员常常使用的工具，评价一个材料的好坏，用心与否。个人有个癖好，就是把PPT中的产品名字盖住，用模版的把颜色和字符统一一下，是否还能看出是哪一个大厂的哪一款产品？粗略估计，80%的产品描述过不了此关。
+
 <!--
 甚至从理论角度*多快好省*是思想初衷是好的，违反客观条件和自然规律，且没有科学依据的的宣传词汇[^7]
 -->
 
+[^7]: https://www.baike.com/wiki/%E5%A4%9A%E5%BF%AB%E5%A5%BD%
 
-## 八卦篇
-提到小而精的经典程序，必须跪拜一下阿波罗登月计划中的**AGC系统**，提供登月过程中航天器的制导、导航和控制。全部系统安装在72KB的只读ROM里(头条APP的2千分之一），运行空间是4KB(byte) RAM（约为本篇Markdown文本的二分之一）。友情奉送[Github](https://github.com/chrislgarry/Apollo-11/blob/master/README.zh_cn.md)打卡地址，膜拜一下阿波罗 11 号制导AGC中指令模块（Comanche055）和登月模块（Luminary099）原码。
+## 5. 八卦篇
 
+提到小而精的经典程序，必须跪拜一下阿波罗登月计划中的**AGC系统**[^3][^4]，提供登月过程中航天器的制导、导航和控制。全部系统安装在72KB的只读ROM里(头条APP的2千分之一），运行空间是4KB(byte) RAM（约为本篇Markdown文本的二分之一）。
+
+友情奉送[Github](https://github.com/chrislgarry/Apollo-11/blob/master/README.zh_cn.md)打卡地址，膜拜一下阿波罗 11 号导航软件AGC中指令模块（Comanche055）和登月模块（Luminary099）原码。
+
+[^3]: https://www.discovermagazine.com/the-sciences/apollo-11s-1202-alarm-explained
+
+[^4]: https://en.wikipedia.org/wiki/Apollo_Guidance_Computer
 
 
 [^1]: https://www.sqlite.org/mostdeployed.html
@@ -162,21 +219,10 @@ google
 [^4]: https://en.wikipedia.org/wiki/Apollo_Guidance_Computer
 [^5]: https://github.com/chrislgarry/Apollo-11/
 [^6]: https://thenewstack.io/the-origin-story-of-sqlite-the-worlds-most-widely-used-database-software/
+
+[^9]: https://sqlite.org/testing.html, How SQLite Is Tested 
+
 [^7]: https://www.baike.com/wiki/%E5%A4%9A%E5%BF%AB%E5%A5%BD%E7%9C%81
+
 [^8]: https://www.baike.com/wiki/%E7%89%87%E5%84%BF%E6%B1%A4%E8%AF%9D
-[^9]: How SQLite Is Tested https://sqlite.org/testing.html
 
-## 10/22 Takedown
-
-### 业务场景： survival 
-
-不是什么：
-1.  不是战争
-2. 不是大big game
-3. 不是远距离
-
- 
-关键指数：
-1. 重量
-2. 体积 
-3.  
