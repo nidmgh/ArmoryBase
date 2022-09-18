@@ -139,13 +139,13 @@ SQLite是嵌入式的数据库，作为应用（APP）的一个部件，同时�
 
 SQLite不用像系统级数据库，深度管理定制的存储管理系统，比如MySQL 开发自己的innoDB, TiDB 采用TiKV和RocksDB。SQLite依赖操作系统自带的文件系统，读写自己DB file，并且继承文件系统的权限管理。
 
-此设计理念简化系统复杂度，但也并不是没有缺陷。并发读写就是SQLite的明显短板之一。因为整个数据库是一个大文件，依靠文件锁来控制读写冲突。只有在后期（2010）实现[WAL](https://sqlite.org/wal.html)后，才提供了并发功能，同时也不是没有代价的。
+此设计理念简化系统复杂度，但也并不是没有缺陷。并发读写就是SQLite的明显短板之一。因为整个数据库是一个大文件，依靠文件锁来控制读写冲突。只有在后期（2010）实现[WAL](https://sqlite.org/wal.html)后，才提供了并发功能，当然也是有代价的。
 
 #### 2.4.5 Serverless
 
 大家常常混淆了“Serverless”这个技术，与云Serverless Computing 这个技术+业务手段，比如[Serverless Database](https://en.wikipedia.org/wiki/Serverless_computing#Serverless_databases)，其实还是client/server的服务架构，准确的说是有服务器(Server)的。
 
-Serverless作为一个技术，其经典定义（现在比较小众了）就是纸面意思：没有服务器/no server.。SQLite是Serverless，因为它与应用程序的同一个进程内运行，共用共享同一块内存空间，相互之间直接读写，而不通过消息协​​议(比如RPC call）和网络交互。
+Serverless作为一个技术，其经典定义（现在比较小众了）就是纸面意思：没有服务器/no server。SQLite是Serverless，因为它与应用程序的同一个进程内运行，共用共享同一块内存空间，相互之间直接读写，而不通过消息协​​议(比如RPC call）和网络交互。
 
 
 
@@ -237,12 +237,20 @@ PPT/胶片是技术产品人员常常使用的工具，评价一个材料的好�
 
 ## 5. 八卦篇
 
+### 阿波罗登月
 提到小而精的经典程序，必须跪拜一下阿波罗登月计划中的**AGC系统**[^3][^4]，提供登月过程中航天器的制导、导航和控制。全部系统安装在72KB的只读ROM里(头条APP的2千分之一），运行空间是4KB(byte) RAM（约为本篇Markdown文本的四分之一）。
 
 友情奉送[Github](https://github.com/chrislgarry/Apollo-11/blob/master/README.zh_cn.md)打卡地址，膜拜一下阿波罗 11 号导航软件AGC中指令模块（Comanche055）和登月模块（Luminary099）原码。
 
 当然再牛的软件都有bug, 如果论如果论惊险性，AGC的1202肯定是历史前10的。有兴趣的同学，可以移步[代码1202，50年前的阿波罗登月给自动驾驶汽车留下宝贵一课](https://www.sohu.com/a/327610148_115873)，或英文原版[Apollo 11's Infamous Landing Error Code 1202 Offers Earthly Lessons For Self-Driving Cars](https://www.forbes.com/sites/lanceeliot/2019/07/16/apollo-11s-infamous-landing-error-code-1202-offers-earthly-lessons-for-self-driving-cars)。
 
+### 花无百日红
+讽刺的是SQLite当年并没有被GD采纳，因为决策者还是保守的使用成熟风险小的Informix。
+
+SQLite的设计也没有考虑到现在强烈的端（手机）和云之间的数据协同/同步需求。加上SQLite不隶属于大厂，商业竞争过程中渐渐被同类产品压迫。比如Google大力扶持的firebase 端云系统，MongoDB并购了Realme也是为此服务。业界比较成功的云原生的时序数据库TDengine也在接口了除SQLite以外的多个端侧数据采集模块。
+
+
+随着手机市场的成熟，IoT和智能汽车的发展，SQLite的强力竞争者将越来越多。SQLite步入软件的中年危机，我们拭目以待，期望它老而弥坚吧
 
 [^3]: https://www.discovermagazine.com/the-sciences/apollo-11s-1202-alarm-explained
 
