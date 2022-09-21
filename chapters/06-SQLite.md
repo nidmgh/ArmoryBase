@@ -252,6 +252,24 @@ SQLite的设计也没有考虑到现在强烈的端（手机）和云之间的�
 
 随着手机市场的成熟，IoT和智能汽车的发展，SQLite的强力竞争者将越来越多。SQLite步入软件的中年危机，我们拭目以待，期望它老而弥坚吧
 
+### 后话
+
+上篇关于SQLite的文章发出来后，感谢各位行业同行的青睐和输入。尤其是某大佬建议关注一下威斯康星大学教授Jignesh Patel和SQLite之父D. Richard Hipp在本月初(2022.09)的VLDB大会上发表的关于SQLite的文章：《SQLite: Past, Present, and Future》，"对SQLite有比较系统的介绍，以及业务场景上的扩展..., 还做了基于SQLite的HTAP系统"。 另外一篇是年初(2022.01) 发表在CIDR的优化器SQLite3/HE。
+
+感谢大佬的建议，这篇文章我之前没有注意到。之前听说过DuckDB，是受SQLite 影响的 " an in-process SQL OLAP Database Management System“, and "the SQLite for analytics".
+
+Jignesh和Hipp的paper中进一步从SQLite base-line来分析和演进。作为数据库老兵，特别喜欢“老骥伏枥 志在千里”的故事，数据库和酒一样老而有韵味。
+
+因为公众号无法回复，文章又无法修改。不敢独享，故单独更新一篇，感谢大佬的输入。
+
+* 《Introducing a Query Acceleration Path for Analytics in SQLite3》，SQLite3/HE， https://www.cidrdb.org/cidr2022/papers/p56-prammer.pdf 
+
+* 《SQLite: Past, Present, and Future》https://www.vldb.org/pvldb/vol15/p3535-gaffney.pdf
+
+
+![Go Badgers\label{06GoBadgers}](../images/06_SQLite_goBadgers.jpeg?) 
+
+
 [^3]: https://www.discovermagazine.com/the-sciences/apollo-11s-1202-alarm-explained
 
 [^4]: https://en.wikipedia.org/wiki/Apollo_Guidance_Computer
@@ -270,3 +288,4 @@ SQLite的设计也没有考虑到现在强烈的端（手机）和云之间的�
 
 [^8]: https://www.baike.com/wiki/%E7%89%87%E5%84%BF%E6%B1%A4%E8%AF%9D
 
+G
